@@ -2,13 +2,13 @@
 {
     public class BusinessContext
     {
-        public readonly IProdutoRepo produtoRepo;
-        public readonly Workflow workflow;
+        public readonly IProdutoRepo ProdutoRepo;
+        public readonly Workflow Workflow;
 
-        public BusinessContext(IProdutoRepo produtoRepo, Workflow workflow)
+        public BusinessContext(IProdutoRepo ProdutoRepo, Workflow Workflow)
         {
-            this.produtoRepo = produtoRepo;
-            this.workflow = workflow;
+            this.ProdutoRepo = ProdutoRepo;
+            this.Workflow = Workflow;
         }
     }
 }

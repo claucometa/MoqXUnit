@@ -1,39 +1,46 @@
 using Microsoft.Extensions.DependencyInjection;
+using Moq;
+using System;
 using Xunit;
 
 namespace MoqXUnit
 {
-    public class UnitTest1 : IClassFixture<StartUp>
+    public class UnitTest1 : IClassFixture<TestFixture>
     {
-        private readonly ServiceProvider serviceProvider;
+        private readonly IServiceProvider serviceProvider;
 
-        public UnitTest1(StartUp fixture)
+        public UnitTest1(TestFixture fixture)
         {
             this.serviceProvider = fixture.ServiceProvider;
         }
 
-        [Fact]
-        public void TestRobo1()
+        [Theory]
+        [InlineData(Robots.Robo1)]
+        [InlineData(Robots.Robo2)]
+        [InlineData(Robots.Robo3)]
+        public void TestMockRobot(Robots tipo)
         {
-            using var scope = serviceProvider.CreateScope();
-            var context = scope.ServiceProvider.GetService<BusinessContext>();
-            context.workflow.Run(Robots.Robo1);
-        }
-        
-        [Fact]
-        public void TestRobo2()
-        {
-            using var scope = serviceProvider.CreateScope();
-            var context = scope.ServiceProvider.GetService<BusinessContext>();
-            context.workflow.Run(Robots.Robo2);
+            Workflow workflow = new Workflow((key) => new Mock<IRobot>().Object);
+            workflow.Run(tipo);
         }
 
-        [Fact]
-        public void TestRobo3()
+        [Theory]
+        [InlineData(Robots.Robo1, "1")]
+        [InlineData(Robots.Robo2, "2")]
+        [InlineData(Robots.Robo3, "3")]
+        public void TestRobot(Robots tipo, string result)
         {
             using var scope = serviceProvider.CreateScope();
             var context = scope.ServiceProvider.GetService<BusinessContext>();
-            context.workflow.Run(Robots.Robo3);
+
+            try
+            {
+                context.Workflow.Run(tipo);
+            }
+            catch (Exception e)
+            {
+                Assert.Equal(result, e.Message);
+            }
         }
     }
 }

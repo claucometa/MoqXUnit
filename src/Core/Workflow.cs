@@ -13,7 +13,8 @@ namespace MoqXUnit
 
         public void Run(Robots tipo)
         {
-            robot(tipo).Run();
+            var x = robot(tipo);
+            x.Run();
         }
     }
 }
