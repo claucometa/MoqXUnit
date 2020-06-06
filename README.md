@@ -2,7 +2,7 @@
 
 This project treat basically three subjects:
 
-- Moq -> To be build yet
+- Moq
 - Conditional IOC 
-- And Test Fixture
+- Test Fixture
 
