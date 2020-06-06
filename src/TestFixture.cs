@@ -28,7 +28,7 @@ namespace MoqXUnit
                 ServiceProvider => key => RobotSelector(key));
         }
 
-        private IRobot RobotSelector(Robots key) => 
+        public static IRobot RobotSelector(Robots key) => 
             key switch {
                 Robots.Robo1 => new Robot1(),
                 Robots.Robo2 => new Robot2(),

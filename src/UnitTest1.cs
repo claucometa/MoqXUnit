@@ -14,21 +14,36 @@ namespace MoqXUnit
             this.serviceProvider = fixture.ServiceProvider;
         }
 
+        [Fact]
+        public void TestMockRobotInterface()
+        {
+            Workflow workflow = new Workflow((key) => new Mock<IRobot>().Object);
+            workflow.Run(Robots.Robo1);
+        }
+
         [Theory]
         [InlineData(Robots.Robo1)]
         [InlineData(Robots.Robo2)]
         [InlineData(Robots.Robo3)]
-        public void TestMockRobot(Robots tipo)
+        public void TestWorkflow(Robots tipo)
         {
-            Workflow workflow = new Workflow((key) => new Mock<IRobot>().Object);
-            workflow.Run(tipo);
+            Workflow workflow = new Workflow((key) => TestFixture.RobotSelector(key));
+
+            try
+            {
+                workflow.Run(tipo);
+            }
+            catch (Exception e)
+            {
+                Assert.EndsWith(e.Message, tipo.ToString());
+            }
         }
 
         [Theory]
-        [InlineData(Robots.Robo1, "1")]
-        [InlineData(Robots.Robo2, "2")]
-        [InlineData(Robots.Robo3, "3")]
-        public void TestRobot(Robots tipo, string result)
+        [InlineData(Robots.Robo1)]
+        [InlineData(Robots.Robo2)]
+        [InlineData(Robots.Robo3)]
+        public void TestBusinessScope(Robots tipo)
         {
             using var scope = serviceProvider.CreateScope();
             var context = scope.ServiceProvider.GetService<BusinessContext>();
@@ -39,7 +54,7 @@ namespace MoqXUnit
             }
             catch (Exception e)
             {
-                Assert.Equal(result, e.Message);
+                Assert.EndsWith(e.Message, tipo.ToString());
             }
         }
     }
