@@ -1,6 +1,6 @@
 # MoqXUnit
 
-This project treat basically three subjects:
+This project make use of tree important concepts:
 
 - Moq
 - Conditional IOC 
